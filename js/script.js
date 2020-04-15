@@ -19,7 +19,6 @@ function generateUsers(){
     url: 'https://randomuser.me/api/?results=12&nat=us',
     dataType: 'json',
     success: function(data) {
-      // console.log(data);
       generateGallery(data);
     }
   });
@@ -43,7 +42,7 @@ searchForm.appendChild(searchInputBox);
 
 const searchSubmitButton = document.createElement('input');
 searchSubmitButton.type = ('submit');
-searchSubmitButton.value = ('&#x1F50D;');
+searchSubmitButton.value = ('&#x1F50D');
 searchSubmitButton.id = ('search-submit');
 searchSubmitButton.className = ('search-submit');
 searchForm.appendChild(searchSubmitButton);
@@ -91,10 +90,27 @@ function generateGallery(data){
     cardDiv.addEventListener('click', (e) => {
       const numberOfRandomUsers = data.results.length
       let clickedCard = e.target;
-      console.log(data.results[i].dob);
       // console.log(clickedCard.firstElementChild.className);
-      generateModal(data.results[i], i, numberOfRandomUsers);
+      generateModal(data.results, i, numberOfRandomUsers);
     });
+
+    //add search feature
+
+    searchInputBox.addEventListener('keyup', (e) =>{
+      let userInput = (e.target).value;
+      console.log(`key ${userInput}`);
+      const cardFirstName = (data.results[i].name.first).toLowerCase();
+      const cardLastName = (data.results[i].name.last).toLowerCase();
+      const cardName = (`${cardFirstName} ${cardLastName}`);
+      console.log(cardFirstName);
+      console.log(cardLastName);
+      console.log(cardName);  
+      if(cardName.includes(userInput.toLowerCase())){
+        console.log('match');
+      }else{ 
+        console.log(`does not match`);
+      }
+    })
   }
 }
 
@@ -105,6 +121,13 @@ function generateModal(data, i, numberOfRandomUsers){
   const modalContainerDiv = document.createElement('div');
   modalContainerDiv.className = ('modal-container');
   body.appendChild(modalContainerDiv);
+  
+  // const modalPreviousBtn = document.createElement('button');
+  // modalPreviousBtn.type = ('button');
+  // modalPreviousBtn.id = ('modal-previous-btn');
+  // modalPreviousBtn.className = ('modal-previous-btn');
+  // modalPreviousBtn.textContent = (`<<`);
+  // modalContainerDiv.appendChild(modalPreviousBtn);
 
   const modalDiv = document.createElement('div');
   modalDiv.className = ('modal');
@@ -119,31 +142,31 @@ function generateModal(data, i, numberOfRandomUsers){
   const modalCloseBtnStrong = document.createElement('strong');
   modalCloseBtnStrong.textContent = ('X');
   modalCloseBtn.appendChild(modalCloseBtnStrong);
-
+  
   const modalInfoContainerDiv = document.createElement('div');
   modalInfoContainerDiv.className = ('modal-info-container');
   modalDiv.appendChild(modalInfoContainerDiv);
 
   const modalImgImages = document.createElement('img');
   modalImgImages.className = ('modal-img');
-  modalImgImages.src = (`${data.picture.large}`);
+  modalImgImages.src = (`${data[i].picture.large}`);
   modalImgImages.alt = ('profile picture');
   modalDiv.appendChild(modalImgImages);
 
   const modalNameCapH3 = document.createElement('h3');
   modalNameCapH3.id = ('name');
   modalNameCapH3.className = ('modal-name');
-  modalNameCapH3.textContent = (`${data.name.first} ${data.name.last}`);
+  modalNameCapH3.textContent = (`${data[i].name.first} ${data[i].name.last}`);
   modalDiv.appendChild(modalNameCapH3);
 
   const modalTextEmailP = document.createElement('p');
   modalTextEmailP.className = ('modal-text');
-  modalTextEmailP.textContent = (`${data.email}`);
+  modalTextEmailP.textContent = (`${data[i].email}`);
   modalDiv.appendChild(modalTextEmailP);
 
   const modalTextCapCityP = document.createElement('p');
   modalTextCapCityP.className = ('modal-text cap');
-  modalTextCapCityP.textContent = (`${data.location.city}`);
+  modalTextCapCityP.textContent = (`${data[i].location.city}`);
   modalDiv.appendChild(modalTextCapCityP);
 
   const hr = document.createElement('hr');
@@ -151,20 +174,20 @@ function generateModal(data, i, numberOfRandomUsers){
 
   const modalTextPhoneNumberP = document.createElement('p');
   modalTextPhoneNumberP.className = ('modal-text');
-  modalTextPhoneNumberP.textContent = (`${data.phone}`);
+  modalTextPhoneNumberP.textContent = (`${data[i].phone}`);
   modalDiv.appendChild(modalTextPhoneNumberP);
 
   const modalTextAddress = document.createElement('p');
   modalTextAddress.className = ('modal-text');
-  modalTextAddress.textContent = (`${data.location.street.number} ${data.location.street.name}, ${data.location.city}, ${data.location.state} ${data.location.postcode}`);
+  modalTextAddress.textContent = (`${data[i].location.street.number} ${data[i].location.street.name}, ${data[i].location.city}, ${data[i].location.state} ${data[i].location.postcode}`);
   modalDiv.appendChild(modalTextAddress);
 
   const modalTextBirthday = document.createElement('p');
   modalTextBirthday.className = ('modal-text');
   //extract date of birth from the original data results (html format is MM/DD/YYYY)
-  let year = (data.dob.date).slice(0,4);
-  let month = (data.dob.date).slice(5,7);
-  let day = (data.dob.date).slice(8,10);
+  let year = (data[i].dob.date).slice(0,4);
+  let month = (data[i].dob.date).slice(5,7);
+  let day = (data[i].dob.date).slice(8,10);
   modalTextBirthday.textContent = (`Birthday: ${month}/${day}/${year}`);
   modalDiv.appendChild(modalTextBirthday);
 
@@ -179,19 +202,19 @@ function generateModal(data, i, numberOfRandomUsers){
   modalPreviousBtn.id = ('modal-previous-btn');
   modalPreviousBtn.className = ('modal-previous-btn');
   modalPreviousBtn.textContent = (`<<`);
-  modalDiv.appendChild(modalPreviousBtn);
+  modalContainerDiv.appendChild(modalPreviousBtn);
 
   const modalNextBtn = document.createElement('button');
   modalNextBtn.type = ('button');
   modalNextBtn.id = ('modal-next-btn');
   modalNextBtn.className = ('modal-next-btn');
   modalNextBtn.textContent = (`>>`);
-  modalDiv.appendChild(modalNextBtn);
+  modalContainerDiv.appendChild(modalNextBtn);
 
   //if it is not the first card, show previous button
-  if(i === 0){
+  if(i <= 0){
     modalPreviousBtn.hidden = true;
-  }else if(i === (numberOfRandomUsers-1)){  
+    }else if(i >= (numberOfRandomUsers-1)){  
     modalNextBtn.hidden = true;
   }else{
     modalPreviousBtn.hidden = false;
@@ -199,8 +222,48 @@ function generateModal(data, i, numberOfRandomUsers){
   }
 
   //add event listener to these two buttons
+  //previous button
   modalPreviousBtn.addEventListener('click', (e) =>{
-    i = i -1;
-    generateModal(data.results[i], i, numberOfRandomUsers);
+    i--;
+    modalImgImages.src = (`${data[i].picture.large}`);
+    modalNameCapH3.textContent = (`${data[i].name.first} ${data[i].name.last}`);
+    modalTextEmailP.textContent = (`${data[i].email}`);
+    modalTextCapCityP.textContent = (`${data[i].location.city}`);
+    modalTextPhoneNumberP.textContent = (`${data[i].phone}`);
+    modalTextAddress.textContent = (`${data[i].location.street.number} ${data[i].location.street.name}, ${data[i].location.city}, ${data[i].location.state} ${data[i].location.postcode}`);
+    let year = (data[i].dob.date).slice(0,4);
+    let month = (data[i].dob.date).slice(5,7);
+    let day = (data[i].dob.date).slice(8,10);
+    modalTextBirthday.textContent = (`Birthday: ${month}/${day}/${year}`);
+    if(i <= 0){
+      modalPreviousBtn.hidden = true;
+    }else if(i >= (numberOfRandomUsers-1)){  
+      modalNextBtn.hidden = true;
+    }else{
+      modalPreviousBtn.hidden = false;
+      modalNextBtn.hidden = false;
+    }
   })
+  //next button
+  modalNextBtn.addEventListener('click', (e) =>{
+    i++;
+    modalImgImages.src = (`${data[i].picture.large}`);
+    modalNameCapH3.textContent = (`${data[i].name.first} ${data[i].name.last}`);
+    modalTextEmailP.textContent = (`${data[i].email}`);
+    modalTextCapCityP.textContent = (`${data[i].location.city}`);
+    modalTextPhoneNumberP.textContent = (`${data[i].phone}`);
+    modalTextAddress.textContent = (`${data[i].location.street.number} ${data[i].location.street.name}, ${data[i].location.city}, ${data[i].location.state} ${data[i].location.postcode}`);
+    let year = (data[i].dob.date).slice(0,4);
+    let month = (data[i].dob.date).slice(5,7);
+    let day = (data[i].dob.date).slice(8,10);
+    modalTextBirthday.textContent = (`Birthday: ${month}/${day}/${year}`);
+    if(i <= 0){
+      modalPreviousBtn.hidden = true;
+    }else if(i >= (numberOfRandomUsers-1)){  
+      modalNextBtn.hidden = true;
+    }else{
+      modalPreviousBtn.hidden = false;
+      modalNextBtn.hidden = false;
+    }
+  });
 }
