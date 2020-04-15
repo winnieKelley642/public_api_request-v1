@@ -15,10 +15,11 @@ generateUsers();
 //create function to generate users
 function generateUsers(){
   $.ajax({
-    url: 'https://randomuser.me/api/?results=12',
+    //for exceeds (name needs to be in english, I selected to only display random US users)
+    url: 'https://randomuser.me/api/?results=12&nat=us',
     dataType: 'json',
     success: function(data) {
-      console.log(data);
+      // console.log(data);
       generateGallery(data);
     }
   });
@@ -88,11 +89,11 @@ function generateGallery(data){
 
     //add event listener for when card is clicked on
     cardDiv.addEventListener('click', (e) => {
-      console.log(`clicked`);
+      const numberOfRandomUsers = data.results.length
       let clickedCard = e.target;
-      console.log(clickedCard);
-      console.log(clickedCard.firstElementChild.className);
-      generateModal(clickedCard.data);
+      console.log(data.results[i].dob);
+      // console.log(clickedCard.firstElementChild.className);
+      generateModal(data.results[i], i, numberOfRandomUsers);
     });
   }
 }
@@ -100,7 +101,7 @@ function generateGallery(data){
 /**
  * Modal
  */
-function generateModal(data){
+function generateModal(data, i, numberOfRandomUsers){
   const modalContainerDiv = document.createElement('div');
   modalContainerDiv.className = ('modal-container');
   body.appendChild(modalContainerDiv);
@@ -125,24 +126,24 @@ function generateModal(data){
 
   const modalImgImages = document.createElement('img');
   modalImgImages.className = ('modal-img');
-  modalImgImages.src = (`${data.results.picture.large}`);
+  modalImgImages.src = (`${data.picture.large}`);
   modalImgImages.alt = ('profile picture');
   modalDiv.appendChild(modalImgImages);
 
   const modalNameCapH3 = document.createElement('h3');
   modalNameCapH3.id = ('name');
   modalNameCapH3.className = ('modal-name');
-  modalNameCapH3.textContent = (`${data.results.name} ${data.results.name}`);
+  modalNameCapH3.textContent = (`${data.name.first} ${data.name.last}`);
   modalDiv.appendChild(modalNameCapH3);
 
   const modalTextEmailP = document.createElement('p');
   modalTextEmailP.className = ('modal-text');
-  modalTextEmailP.textContent = (`${data.results.email}`);
+  modalTextEmailP.textContent = (`${data.email}`);
   modalDiv.appendChild(modalTextEmailP);
 
   const modalTextCapCityP = document.createElement('p');
   modalTextCapCityP.className = ('modal-text cap');
-  modalTextCapCityP.textContent = (`${data.results.location}`);
+  modalTextCapCityP.textContent = (`${data.location.city}`);
   modalDiv.appendChild(modalTextCapCityP);
 
   const hr = document.createElement('hr');
@@ -150,16 +151,56 @@ function generateModal(data){
 
   const modalTextPhoneNumberP = document.createElement('p');
   modalTextPhoneNumberP.className = ('modal-text');
-  modalTextPhoneNumberP.textContent = (`${data.results.phone}`);
+  modalTextPhoneNumberP.textContent = (`${data.phone}`);
   modalDiv.appendChild(modalTextPhoneNumberP);
 
   const modalTextAddress = document.createElement('p');
   modalTextAddress.className = ('modal-text');
-  modalTextAddress.textContent = (`${data.results.location}`);
+  modalTextAddress.textContent = (`${data.location.street.number} ${data.location.street.name}, ${data.location.city}, ${data.location.state} ${data.location.postcode}`);
   modalDiv.appendChild(modalTextAddress);
 
   const modalTextBirthday = document.createElement('p');
   modalTextBirthday.className = ('modal-text');
-  modalTextBirthday.textContent = (`Birthday: ${data.results.dob}`);
+  //extract date of birth from the original data results (html format is MM/DD/YYYY)
+  let year = (data.dob.date).slice(0,4);
+  let month = (data.dob.date).slice(5,7);
+  let day = (data.dob.date).slice(8,10);
+  modalTextBirthday.textContent = (`Birthday: ${month}/${day}/${year}`);
   modalDiv.appendChild(modalTextBirthday);
+
+  //making the X button work for closing the modal
+  modalCloseBtn.addEventListener('click', (e) =>{
+    modalContainerDiv.hidden = true;
+  });
+
+  //add navigation buttons for exceeds
+  const modalPreviousBtn = document.createElement('button');
+  modalPreviousBtn.type = ('button');
+  modalPreviousBtn.id = ('modal-previous-btn');
+  modalPreviousBtn.className = ('modal-previous-btn');
+  modalPreviousBtn.textContent = (`<<`);
+  modalDiv.appendChild(modalPreviousBtn);
+
+  const modalNextBtn = document.createElement('button');
+  modalNextBtn.type = ('button');
+  modalNextBtn.id = ('modal-next-btn');
+  modalNextBtn.className = ('modal-next-btn');
+  modalNextBtn.textContent = (`>>`);
+  modalDiv.appendChild(modalNextBtn);
+
+  //if it is not the first card, show previous button
+  if(i === 0){
+    modalPreviousBtn.hidden = true;
+  }else if(i === (numberOfRandomUsers-1)){  
+    modalNextBtn.hidden = true;
+  }else{
+    modalPreviousBtn.hidden = false;
+    modalNextBtn.hidden = false;
+  }
+
+  //add event listener to these two buttons
+  modalPreviousBtn.addEventListener('click', (e) =>{
+    i = i -1;
+    generateModal(data.results[i], i, numberOfRandomUsers);
+  })
 }
