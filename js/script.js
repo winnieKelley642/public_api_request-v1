@@ -42,7 +42,9 @@ searchForm.appendChild(searchInputBox);
 
 const searchSubmitButton = document.createElement('input');
 searchSubmitButton.type = ('submit');
-searchSubmitButton.value = ('&#x1F50D');
+//This isn't working for some reason, but I googled the hexCode and found a different code for the search button.
+// searchSubmitButton.value = ('&#x1F50D');
+searchSubmitButton.value = ('\uD83D\uDD0D');
 searchSubmitButton.id = ('search-submit');
 searchSubmitButton.className = ('search-submit');
 searchForm.appendChild(searchSubmitButton);
@@ -286,23 +288,34 @@ searchInputBox.addEventListener('keyup', (e) =>{
       card[i].style.display = ('none')
     }
   }
+  for(let j = 0; j < cardName.length; j++){
+  const notMatchedCards = (card[j].style.display = 'none');
+  console.log(card.length);
+  console.log(notMatchedCards.length);
+  if(notMatchedCards === card.length){
+    const noneMatchDiv = document.createElement('div');
+    noneMatchDiv.className = ('noneMatchDiv');
+    noneMatchDiv.textContent = (`none matched`);
+    galleryDiv.appendChild(noneMatchDiv);
+  }
+}
 
   //if no match to search
-  for(let j = 0; j < card.length; j++){
-    if(card[j].style.display === 'flex'){
-      matchedCards++;
-      const noneMatchDiv = document.createElement('div');
-      noneMatchDiv.className = ('noneMatchDiv');
-      noneMatchDiv.textContent = (`none matched`);
+  // for(let j = 0; j < card.length; j++){
+  //   if(card[j].style.display === 'flex'){
+  //     matchedCards++;
+  //     const noneMatchDiv = document.createElement('div');
+  //     noneMatchDiv.className = ('noneMatchDiv');
+  //     noneMatchDiv.textContent = (`none matched`);
 
-      if(matchedCards === ((card.length)-1)){
-        galleryDiv.appendChild(noneMatchDiv);
-        matchedCards++;
-        noneMatchDiv.style.display = ('flex');
-        console.log(galleryDiv);
-      }else{
-        noneMatchDiv.style.display = ('none');
-      }
-    }
-  }
+  //     if(matchedCards === ((card.length)-1)){
+  //       galleryDiv.appendChild(noneMatchDiv);
+  //       matchedCards++;
+  //       noneMatchDiv.style.display = ('flex');
+  //       console.log(galleryDiv);
+  //     }else{
+  //       noneMatchDiv.style.display = ('none');
+  //     }
+  //   }
+  // }
 });
