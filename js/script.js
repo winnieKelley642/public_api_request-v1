@@ -93,24 +93,6 @@ function generateGallery(data){
       // console.log(clickedCard.firstElementChild.className);
       generateModal(data.results, i, numberOfRandomUsers);
     });
-
-    //add search feature
-
-    searchInputBox.addEventListener('keyup', (e) =>{
-      let userInput = (e.target).value;
-      console.log(`key ${userInput}`);
-      const cardFirstName = (data.results[i].name.first).toLowerCase();
-      const cardLastName = (data.results[i].name.last).toLowerCase();
-      const cardName = (`${cardFirstName} ${cardLastName}`);
-      console.log(cardFirstName);
-      console.log(cardLastName);
-      console.log(cardName);  
-      if(cardName.includes(userInput.toLowerCase())){
-        console.log('match');
-      }else{ 
-        console.log(`does not match`);
-      }
-    })
   }
 }
 
@@ -267,3 +249,27 @@ function generateModal(data, i, numberOfRandomUsers){
     }
   });
 }
+
+//add search feature
+searchInputBox.addEventListener('keyup', (e) =>{
+  let userInput = (e.target).value;
+  console.log(`key ${userInput}`);
+  console.log(`data: ${data.results[i]}`);
+  for(let i = 0; i < data.results[i].length; i++){
+    const cardFirstName = (data.results[i].name.first).toLowerCase();
+    const cardLastName = (data.results[i].name.last).toLowerCase();
+    const cardName = (`${cardFirstName} ${cardLastName}`);
+    const card = document.querySelectorAll('.card');
+    console.log(`card: ${card}`);
+    // console.log(cardFirstName);
+    // console.log(cardLastName);
+    // console.log(cardName);  
+    console.log(`DATA: ${data}`);
+    data.forEach(element => console.log(element));
+    if(cardName.includes(userInput.toLowerCase())){
+      console.log('match');
+    }else{ 
+      console.log(`does not match`);
+    }
+  }
+});
