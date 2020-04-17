@@ -257,12 +257,16 @@ searchSubmitButton.addEventListener('click', (e) =>{
   console.log(`key ${userInput}`);
   const card = document.querySelectorAll('.card');
   const cardName = document.querySelectorAll('.card-name')
+  let matchedCards = 0;
 
   for(let i = 0; i < cardName.length; i++){  
     if(cardName[i].textContent.toLowerCase().includes(userInput)){
       card[i].style.display = ('flex');
     }else{ 
       card[i].style.display = ('none');
+      const noneMatchDiv = document.createElement('div');
+      noneMatchDiv.textContent = (`none matched`);
+      galleryDiv.appendChild(noneMatchDiv);
     }
   }
 });
@@ -272,12 +276,33 @@ searchInputBox.addEventListener('keyup', (e) =>{
   console.log(`key ${userInput}`);
   const card = document.querySelectorAll('.card');
   const cardName = document.querySelectorAll('.card-name')
+  let matchedCards = 0;
 
   for(let i = 0; i < cardName.length; i++){  
     if(cardName[i].textContent.toLowerCase().includes(userInput)){
       card[i].style.display = ('flex');
+      matchedCards++;
     }else{ 
-      card[i].style.display = ('none');
+      card[i].style.display = ('none')
+    }
+  }
+
+  //if no match to search
+  for(let j = 0; j < card.length; j++){
+    if(card[j].style.display === 'flex'){
+      matchedCards++;
+      const noneMatchDiv = document.createElement('div');
+      noneMatchDiv.className = ('noneMatchDiv');
+      noneMatchDiv.textContent = (`none matched`);
+
+      if(matchedCards === ((card.length)-1)){
+        galleryDiv.appendChild(noneMatchDiv);
+        matchedCards++;
+        noneMatchDiv.style.display = ('flex');
+        console.log(galleryDiv);
+      }else{
+        noneMatchDiv.style.display = ('none');
+      }
     }
   }
 });
