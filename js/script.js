@@ -47,6 +47,7 @@ searchSubmitButton.id = ('search-submit');
 searchSubmitButton.className = ('search-submit');
 searchForm.appendChild(searchSubmitButton);
 
+console.log(searchForm.name);
 /**
  * Gallery
  */
@@ -251,25 +252,32 @@ function generateModal(data, i, numberOfRandomUsers){
 }
 
 //add search feature
-searchInputBox.addEventListener('keyup', (e) =>{
-  let userInput = (e.target).value;
+searchSubmitButton.addEventListener('click', (e) =>{
+  let userInput = (searchInputBox.value);
   console.log(`key ${userInput}`);
-  console.log(`data: ${data.results[i]}`);
-  for(let i = 0; i < data.results[i].length; i++){
-    const cardFirstName = (data.results[i].name.first).toLowerCase();
-    const cardLastName = (data.results[i].name.last).toLowerCase();
-    const cardName = (`${cardFirstName} ${cardLastName}`);
-    const card = document.querySelectorAll('.card');
-    console.log(`card: ${card}`);
-    // console.log(cardFirstName);
-    // console.log(cardLastName);
-    // console.log(cardName);  
-    console.log(`DATA: ${data}`);
-    data.forEach(element => console.log(element));
-    if(cardName.includes(userInput.toLowerCase())){
-      console.log('match');
+  const card = document.querySelectorAll('.card');
+  const cardName = document.querySelectorAll('.card-name')
+
+  for(let i = 0; i < cardName.length; i++){  
+    if(cardName[i].textContent.toLowerCase().includes(userInput)){
+      card[i].style.display = ('flex');
     }else{ 
-      console.log(`does not match`);
+      card[i].style.display = ('none');
+    }
+  }
+});
+
+searchInputBox.addEventListener('keyup', (e) =>{
+  let userInput = ((e.target).value);
+  console.log(`key ${userInput}`);
+  const card = document.querySelectorAll('.card');
+  const cardName = document.querySelectorAll('.card-name')
+
+  for(let i = 0; i < cardName.length; i++){  
+    if(cardName[i].textContent.toLowerCase().includes(userInput)){
+      card[i].style.display = ('flex');
+    }else{ 
+      card[i].style.display = ('none');
     }
   }
 });
