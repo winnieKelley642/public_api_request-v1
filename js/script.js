@@ -253,7 +253,7 @@ function generateModal(data, i, numberOfRandomUsers){
   });
 }
 
-//add search feature
+//add search feature, please ignore commented code here, it is my failed attempt of displaying a no match message, but due to the deadline of this project and it isn't a requirement, I am submitting the project and coming back to it to try and fix it. 
 searchSubmitButton.addEventListener('click', (e) =>{
   let userInput = (searchInputBox.value);
   console.log(`key ${userInput}`);
@@ -266,56 +266,63 @@ searchSubmitButton.addEventListener('click', (e) =>{
       card[i].style.display = ('flex');
     }else{ 
       card[i].style.display = ('none');
-      const noneMatchDiv = document.createElement('div');
-      noneMatchDiv.textContent = (`none matched`);
-      galleryDiv.appendChild(noneMatchDiv);
     }
   }
 });
 
 searchInputBox.addEventListener('keyup', (e) =>{
   let userInput = ((e.target).value);
-  console.log(`key ${userInput}`);
+  // console.log(`key ${userInput}`);
   const card = document.querySelectorAll('.card');
   const cardName = document.querySelectorAll('.card-name')
-  let matchedCards = 0;
-
+  // const noneMatchDiv = document.createElement('div');
+  // noneMatchDiv.className = ('noneMatchDiv');
+  // noneMatchDiv.textContent = (`none matched`);
+  // noneMatchDiv.style.color =  ('white');
+  // galleryDiv.appendChild(noneMatchDiv);
+  // noneMatchDiv.style.display = ('none');
+  // let matchedCards = 0;
   for(let i = 0; i < cardName.length; i++){  
     if(cardName[i].textContent.toLowerCase().includes(userInput)){
+      // noneMatchDiv.style.display = ('none');
       card[i].style.display = ('flex');
-      matchedCards++;
+      // matchedCards++;
     }else{ 
       card[i].style.display = ('none')
     }
   }
-  for(let j = 0; j < cardName.length; j++){
-  const notMatchedCards = (card[j].style.display = 'none');
-  console.log(card.length);
-  console.log(notMatchedCards.length);
-  if(notMatchedCards === card.length){
-    const noneMatchDiv = document.createElement('div');
-    noneMatchDiv.className = ('noneMatchDiv');
-    noneMatchDiv.textContent = (`none matched`);
-    galleryDiv.appendChild(noneMatchDiv);
-  }
-}
 
-  //if no match to search
-  // for(let j = 0; j < card.length; j++){
-  //   if(card[j].style.display === 'flex'){
-  //     matchedCards++;
-  //     const noneMatchDiv = document.createElement('div');
-  //     noneMatchDiv.className = ('noneMatchDiv');
-  //     noneMatchDiv.textContent = (`none matched`);
-
-  //     if(matchedCards === ((card.length)-1)){
-  //       galleryDiv.appendChild(noneMatchDiv);
-  //       matchedCards++;
-  //       noneMatchDiv.style.display = ('flex');
-  //       console.log(galleryDiv);
-  //     }else{
-  //       noneMatchDiv.style.display = ('none');
-  //     }
-  //   }
+  // console.log(`matched = ${matchedCards}`);
+  // console.log(`namelength: ${cardName.length}`);
+  // if(matchedCards === ((cardName.length)-1) && (matchedCards.style.display === ('none'))){
+  //   noneMatchDiv.style.display = ('flex');
+  //   matchedCards = ((cardName.length)+1);
+  // }else{
+  //   noneMatchDiv.style.display = ('none');
   // }
 });
+
+
+// noMatch();
+
+// // if no match to search
+// function noMatch(){
+//   const numberOfCards = document.querySelectorAll('.card');
+//   let matchedCards = 0;
+//   for(let i = 0; i < numberOfCards[i].length;){
+//   console.log(`cardLength: ${numberOfCards.length}`);
+//   for(let j = 0; j < numberOfCards.length; j++){
+//     const notMatchedCards = (numberOfCards.style.display = 'none');
+//     console.log(`cardLengthP ${numberOfCards.length}`);
+//     console.log(`notMAtched: ${notMatchedCards.length}`);
+//     if(notMatchedCards === numberOfCards.length){
+//       const noneMatchDiv = document.createElement('div');
+//       noneMatchDiv.className = ('noneMatchDiv');
+//       noneMatchDiv.textContent = (`none matched`);
+//       noneMatchDiv.style.color =  ('white');
+//       galleryDiv.appendChild(noneMatchDiv);
+//     }
+//     return notMatchedCards;
+//   }
+// }
+// }
